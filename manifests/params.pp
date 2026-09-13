@@ -217,7 +217,7 @@ class php::params inherits php::globals {
       $fpm_config_file         = '/etc/php/php-fpm.conf'
       $fpm_error_log           = 'syslog'
       $fpm_inifile             = '/etc/php/php.ini'
-      $fpm_package_suffix      = 'fpm'
+      $fpm_package_suffix      = undef
       $fpm_pool_dir            = '/etc/php/php-fpm.d'
       $fpm_service_name        = 'php-fpm'
       $fpm_user                = 'http'
@@ -234,6 +234,42 @@ class php::params inherits php::globals {
       $ext_tool_query          = undef
       $ext_tool_enabled        = false
       $pear                    = false
+    }
+    'Gentoo': {
+      if ($php::globals::php_version != undef) {
+        $php_version = $php::globals::php_version
+      } else {
+        fail('$php::globals::php_version required on osfamily Gentoo')
+      }
+
+      $config_root_ini         = '/etc/php/conf.d'
+      $config_root_inifile     = '/etc/php/php.ini'
+      $common_package_names    = []
+      $common_package_suffixes = []
+      $cli_inifile             = "/etc/php/cli-php${php_version}/php.ini"
+      $dev_package_suffix      = undef
+      $fpm_pid_file            = '/run/php-fpm/php-fpm.pid'
+      $fpm_config_file         = "/etc/php/fpm-php${php_version}/php-fpm.conf"
+      $fpm_error_log           = 'syslog'
+      $fpm_inifile             = "/etc/php/fpm-php${php_version}/php.ini"
+      $fpm_package_suffix      = undef
+      $fpm_pool_dir            = "/etc/php/fpm-php${php_version}/fpm.d"
+      $fpm_service_name        = "php-fpm@${php_version}"
+      $fpm_user                = 'nobody'
+      $fpm_group               = 'nobody'
+      $apache_ini              = $config_root_ini
+      $apache_inifile          = '/etc/php/php.ini'
+      $embedded_package_suffix = 'embedded'
+      $embedded_inifile        = '/etc/php/php.ini'
+      $package_prefix          = 'php'
+      $compiler_packages       = undef
+      $manage_repos            = false
+      $root_group              = 'root'
+      $ext_tool_enable         = undef
+      $ext_tool_query          = undef
+      $ext_tool_enabled        = false
+      $pear                    = false
+
     }
     default: {
       fail("Unsupported osfamily: ${facts['os']['family']}")
